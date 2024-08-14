@@ -4,7 +4,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import Deck from "./deck";
+import DeckView from "./deck";
 import { hydrateDecklist } from "@/lib/decklist";
 
 
@@ -35,13 +35,15 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="absolute left-10 top-10">
         <textarea
+          className="decklist-input"
           name="decklistInput"
           defaultValue={defaultDeckListStr}
           rows={5}
           cols={20}
+          onChange={(event) => setDecklist(hydrateDecklist(event.target.value))}
         />
       </div>
-      <Deck deckList={decklist} />
+      <DeckView deckList={decklist} />
     </main>
   );
 }
