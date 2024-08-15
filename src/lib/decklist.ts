@@ -1,4 +1,4 @@
-import { Card } from "./models"
+import { Card, Faction } from "./models"
 import CardsCore from "./cards_core.json"
 
 interface CardsDB {
@@ -6,30 +6,60 @@ interface CardsDB {
 }
 const typedCardDB = CardsCore as unknown as CardsDB
 
-export interface CardQty {
+export class CardQty {
   card: Card
   quantity: number
+
+  constructor(card: Card, quantity: number) {
+    this.card = card
+    this.quantity = quantity
+  }
+
+  get repeatedCards(): Array<Card> {
+    return Array(this.quantity).fill(this.card)
+  }
+}
+
+export class CardStack {
+  cards: Array<Card>
+
+  constructor() {
+    this.cards = []
+  }
+
+  push(newCards: Array<Card>) { 
+    this.cards = this.cards.concat(newCards)
+  }
+
+  get length(): number { return this.cards.length }
 }
 
 export class Decklist {
-  cards: Array<CardQty>;
+  cards: Array<CardQty>
+  hero: Card
+  
+  get faction(): Faction { return this.hero.mainFaction } 
 
   constructor(cards: Array<CardQty>) {
-    this.cards = cards
+    this.cards = cards.filter((cq) => cq.card.type != "HERO")
+    this.hero = cards.find((cq) => cq.card.type == "HERO")!.card
   }
 
-  groupedByName(): Array<Array<CardQty>> {
-    let groups: Array<Array<CardQty>> = []
+  cardStacks(): Array<CardStack> {
+    let groups: Array<CardStack> = []
     for (let cardQty of this.cards) {
-      let existingGroup = groups.find((g) => cardQty.card.name.en == g[0].card.name.en)
-      if (existingGroup) {
-        existingGroup.push(cardQty)
+      let existingStack = groups.find((g) => cardQty.card.name.en == g.cards[0].name.en)
+      if (existingStack) {
+        existingStack.push(cardQty.repeatedCards)
       } else {
-        groups.push([cardQty])
+        const newStack = new CardStack()
+        newStack.push(cardQty.repeatedCards)
+        groups.push(newStack)
       }
     }
     return groups
   }
+
 }
 
 export function hydrateDecklist(decklist: string): Decklist {
@@ -44,7 +74,7 @@ export function hydrateDecklist(decklist: string): Decklist {
       const cardId = fixCardId(match[2])
       const card = typedCardDB[cardId]
       if (quantity && card) {
-        cards.push({ quantity, card })
+        cards.push(new CardQty(card, quantity))
       }
     }
   }

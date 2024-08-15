@@ -26,6 +26,14 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.visualarea {
+  image-rendering: crisp-edges;
+}
+
+.clip-heroThumb {
+  clip-path: polygon(0 0, 100% 0, 92% 100%, 0 100%)
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
