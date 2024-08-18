@@ -1,4 +1,4 @@
-import { Card, Faction } from "./models"
+import { Card, CardRefQty, Faction } from "./models"
 import CardsCore from "./cards_core.json"
 
 interface CardsDB {
@@ -60,6 +60,10 @@ export class Decklist {
     return groups
   }
 
+  get referenceList(): Array<CardRefQty> {
+    let ret = [{card: {id: this.hero.id}, quantity: 1}]
+    return ret.concat(this.cards.map((cq) => ({card: {id: cq.card.id}, quantity: cq.quantity})))
+  }
 }
 
 export function hydrateDecklist(decklist: string): Decklist {

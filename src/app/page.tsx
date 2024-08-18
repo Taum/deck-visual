@@ -6,6 +6,7 @@ import { toJpeg } from 'html-to-image';
 
 import DeckView from "./deck";
 import { hydrateDecklist } from "@/lib/decklist";
+import { encodeList } from "@/lib/encoder"
 
 
 export default function Home() {
@@ -61,6 +62,9 @@ export default function Home() {
           cols={20}
           onChange={(event) => setDecklist(hydrateDecklist(event.target.value))}
         />
+      </div>
+      <div className="absolute left-52 top-10">
+        <pre>{encodeList(decklist.referenceList)}</pre>
       </div>
       <div className="absolute right-10 top-10">
         <button onClick={createImage}>Export as image</button>

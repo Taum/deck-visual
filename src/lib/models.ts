@@ -3,6 +3,14 @@ export interface LocalizedString {
   fr: string
 }
 
+export interface CardRef {
+  id: string
+}
+export interface CardRefQty {
+  card: CardRef
+  quantity: number
+}
+
 export interface Card {
   id: string
   name: LocalizedString
@@ -17,7 +25,7 @@ export interface Card {
 export enum Faction {
   Axiom = "AX",
   Bravos = "BR",
-  Lyra = "LR",
+  Lyra = "LY",
   Muna = "MU",
   Ordis = "OR",
   Yzmir = "YZ",
