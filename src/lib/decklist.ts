@@ -68,6 +68,8 @@ export class Decklist {
 
 export function hydrateDecklist(decklist: string): Decklist {
 
+  console.log("Decklist: \n", decklist)
+
   let cards: Array<CardQty> = []
 
   let lines = decklist.split("\n")

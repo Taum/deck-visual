@@ -6,7 +6,7 @@ import { toJpeg } from 'html-to-image';
 
 import DeckView from "./deck";
 import { hydrateDecklist } from "@/lib/decklist";
-import { encodeList } from "@/lib/encoder"
+import { encodeList, decodeList } from "@/lib/encoder"
 
 
 export default function Home() {
@@ -53,7 +53,15 @@ export default function Home() {
 
   return (
     <main className="flex justify-center min-h-screen">
-      <div className="absolute left-10 top-10">
+      <div className="absolute left-10 top-5">
+        <textarea
+          className="decklist-code-input"
+          name="decklistcodeInput"
+          defaultValue={encodeList(decklist.referenceList)}
+          rows={2}
+          cols={40}
+          onChange={(event) => console.log(decodeList(event.target.value))}
+        />
         <textarea
           className="decklist-input"
           name="decklistInput"
@@ -63,13 +71,13 @@ export default function Home() {
           onChange={(event) => setDecklist(hydrateDecklist(event.target.value))}
         />
       </div>
-      <div className="absolute left-52 top-10">
+      <div className="absolute left-52 top-32">
         <pre>{encodeList(decklist.referenceList)}</pre>
       </div>
       <div className="absolute right-10 top-10">
         <button onClick={createImage}>Export as image</button>
       </div>
-      <div className="visualarea max-w-visualarea min-w-visualarea mt-24">
+      <div className="visualarea max-w-visualarea min-w-visualarea mt-48">
         <div ref={decklistRef}> 
           <DeckView deckList={decklist} />
         </div>
