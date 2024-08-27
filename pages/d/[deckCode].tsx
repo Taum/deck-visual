@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from "react";
-import { toJpeg } from 'html-to-image';
 
-import DeckView from "../deck/index";
-import { Decklist, hydrateDecklist } from "@/lib/decklist";
+import DeckView from "@components/deck";
+import { Decklist, hydrateDecklist } from "@lib/decklist";
 import { decodeList } from "altered-deckfmt";
+
+import "@app/globals.css";
 
 export default function DeckSlug() {
   const router = useRouter()
@@ -40,7 +41,7 @@ export default function DeckSlug() {
   return (
     <>
       <main className="flex justify-center min-h-screen">
-        <div className="visualarea max-w-visualarea min-w-visualarea mt-48">
+        <div className="visualarea max-w-visualarea min-w-visualarea mt-8 mb-8">
           <div ref={decklistRef}> 
             {decklist && <DeckView deckList={decklist} />}
           </div>

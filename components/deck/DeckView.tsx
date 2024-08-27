@@ -45,11 +45,20 @@ export function DeckHeaderView(props: DeckHeaderProps) {
   const baseColor = colorForFaction(props.deckList.faction)
   if (!heroThumb) { return null }
   return (
-    <div className={clsx(`bg-${baseColor}-800 text-${baseColor}-50`, "flex flex-row")}>
-      <Image className="h-48 clip-heroThumb" src={heroThumb} alt={hero.name.en} width={540} height={192} />
-      <div className="flex flex-col py-2 px-1">
-        <h1 className="font-title font-extrabold text-5xl">Big Bang Boosts</h1>
-        <h2 className="font-title font-extrabold text-xl">{hero.name.en}</h2>
+    <div className={clsx(`bg-${baseColor}-800 text-${baseColor}-50`, "flex flex-row h-32")}>
+      <Image className="grow-0 shrink-0 h-32 clip-heroThumb aspect-headerthumb" src={heroThumb} alt={hero.name.en} width={640} height={288} style={{width: 'auto', height: 'auto'}} quality={90} />
+      <div className="grow flex flex-col justify-between py-2 px-1">
+        <div className="">
+          <h2 className="font-title font-extrabold text-xl">{hero.name.en}</h2>
+        </div>
+        <div className="self-stretch flex flex-row justify-between">
+          <div className="">
+            25 Characters - 12 Spells - 3 Landmarks
+          </div>
+          <div className="">
+            21 C | 15 R | 3 U
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -88,7 +97,7 @@ export function CardView(props: CardProps) {
       className={clsx("rounded-card shadow-card relative", trimmed && "max-h-trimmed")}
       style={{zIndex: props.zIndex}}
       >
-      <Image className="rounded-card" alt={card.name.en} src={card.imagePath.en} width={1200} height={1200} />
+      <Image className="rounded-card" alt={card.name.en} src={card.imagePath.en} width={1200} height={1200} quality={90} />
     </div>
   )
 }
