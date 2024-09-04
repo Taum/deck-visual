@@ -46,3 +46,9 @@ body {
   font-style: normal;
   font-size: 8pt;
 }
+
+.font-montserrat {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}

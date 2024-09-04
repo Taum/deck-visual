@@ -7,6 +7,13 @@ import { decodeList } from "altered-deckfmt";
 
 import "@app/globals.css";
 
+
+/**
+ * Examples:
+ * http://localhost:3000/d/ECAjnBHhDwp4l8Y-NPHPkDyR5ks0ecPPPsoBBcvhYgA
+ * http://localhost:3000/d/ECAjGhnSHpR0s6gdRaqPWRrRVp64deQESnV0UqcdPA
+ */
+
 export default function DeckSlug() {
   const router = useRouter()
   const [decklist, setDecklist] = useState<Decklist | undefined>(undefined)

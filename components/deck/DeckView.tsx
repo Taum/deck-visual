@@ -4,6 +4,13 @@ import { Decklist, CardStack } from '../../lib/decklist'
 import { Card, Faction } from '../../lib/models'
 import clsx from 'clsx';
 
+import { Montserrat } from 'next/font/google'
+ 
+const montserrat = Montserrat({
+  weight: ['400', '600'],
+  subsets: ['latin'],
+})
+
 export interface DeckProps {
   deckList: Decklist
 }
@@ -51,12 +58,14 @@ export function DeckHeaderView(props: DeckHeaderProps) {
         <div className="">
           <h2 className="font-title font-extrabold text-xl">{hero.name.en}</h2>
         </div>
-        <div className="self-stretch flex flex-row justify-between">
+        <div className={clsx(montserrat.className, "self-stretch flex flex-row justify-between")}>
           <div className="">
             25 Characters - 12 Spells - 3 Landmarks
           </div>
-          <div className="">
-            21 C | 15 R | 3 U
+          <div className="flex flex-row items-baseline font-semibold">
+            21 <Image src="/asset/gem_c.png" width={25} height={20} alt="Commons" />
+            15 <Image src="/asset/gem_r.png" width={30} height={20} alt="Rares" />
+             3 <Image src="/asset/gem_u.png" width={30} height={20} alt="Uniques" />
           </div>
         </div>
       </div>

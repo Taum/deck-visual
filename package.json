@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "altered-deckfmt": "file:../altered-deckfmt",
+    "altered-deckfmt": "^0.1.0",
     "clsx": "^2.1.1",
     "html-to-image": "^1.11.11",
     "next": "14.2.6",
