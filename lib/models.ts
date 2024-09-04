@@ -19,6 +19,7 @@ export interface Card {
   mainFaction: Faction
   elements: CardElements
   assets: CardAssets
+  rarity: "COMMON" | "RARE" | "UNIQUE"
   type: "SPELL" | "CHARACTER" | "PERMANENT" | "HERO" | "TOKEN"
 }
 

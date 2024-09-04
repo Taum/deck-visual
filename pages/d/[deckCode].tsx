@@ -22,8 +22,9 @@ export default function DeckSlug() {
 
   useEffect(() => {
     const deckCode = router.query.deckCode
-    if (!deckCode) { return }
-    const textDeckList: string = decodeList(deckCode)
+    const deckCodeStr = deckCode instanceof Array ? deckCode.at(0) : deckCode
+    if (!deckCodeStr) { return }
+    const textDeckList: string = decodeList(deckCodeStr)
     const deck = hydrateDecklist(textDeckList)
     setDecklist(deck)
   }, [router, setDecklist]);

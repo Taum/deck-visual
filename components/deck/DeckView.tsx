@@ -5,7 +5,7 @@ import { Card, Faction } from '../../lib/models'
 import clsx from 'clsx';
 
 import { Montserrat } from 'next/font/google'
- 
+
 const montserrat = Montserrat({
   weight: ['400', '600'],
   subsets: ['latin'],
@@ -35,8 +35,8 @@ export default function DeckView(props: DeckProps) {
       <DeckHeaderView deckList={deckList} />
       <div className="grid grid-cols-5 gap-4 p-4">
         {props.deckList.cardStacks().map((stack, index) => {
-            return <CardStackView key={index} stack={stack} />
-          })}
+          return <CardStackView key={index} stack={stack} />
+        })}
       </div>
     </div>
   )
@@ -46,26 +46,68 @@ export interface DeckHeaderProps {
   deckList: Decklist
 }
 
+class DeckStats {
+  public characters: number = 0
+  public spells: number = 0
+  public permanents: number = 0
+
+  public commons: number = 0
+  public rares: number = 0
+  public uniques: number = 0
+}
+
+function gatherStats(deckList: Decklist): DeckStats {
+  let stats = new DeckStats()
+  for (let card of deckList.cards) {
+    switch (card.card.type) {
+      case "CHARACTER":
+        stats.characters += card.quantity
+        break
+      case "SPELL":
+        stats.spells += card.quantity
+        break
+      case "PERMANENT":
+        stats.permanents += card.quantity
+        break
+    }
+    switch (card.card.rarity) {
+      case "COMMON":
+        stats.commons += card.quantity
+        break
+      case "RARE":
+        stats.rares += card.quantity
+        break
+      case "UNIQUE":
+        stats.uniques += card.quantity
+        break
+    }
+  }
+  return stats
+}
+
 export function DeckHeaderView(props: DeckHeaderProps) {
   const hero = props.deckList.hero
   const heroThumb = hero.assets.HERO_THUMB?.at(0)
   const baseColor = colorForFaction(props.deckList.faction)
+  const stats = gatherStats(props.deckList)
+
   if (!heroThumb) { return null }
+
   return (
     <div className={clsx(`bg-${baseColor}-800 text-${baseColor}-50`, "flex flex-row h-32")}>
-      <Image className="grow-0 shrink-0 h-32 clip-heroThumb aspect-headerthumb" src={heroThumb} alt={hero.name.en} width={640} height={288} style={{width: 'auto', height: 'auto'}} quality={90} />
+      <Image className="grow-0 shrink-0 h-32 clip-heroThumb aspect-headerthumb" src={heroThumb} alt={hero.name.en} width={640} height={288} style={{ width: 'auto', height: 'auto' }} quality={90} />
       <div className="grow flex flex-col justify-between py-2 px-1">
         <div className="">
           <h2 className="font-title font-extrabold text-xl">{hero.name.en}</h2>
         </div>
         <div className={clsx(montserrat.className, "self-stretch flex flex-row justify-between")}>
           <div className="">
-            25 Characters - 12 Spells - 3 Landmarks
+            {stats.characters} Characters - {stats.spells} Spells - {stats.permanents} Permanents
           </div>
           <div className="flex flex-row items-baseline font-semibold">
-            21 <Image src="/asset/gem_c.png" width={25} height={20} alt="Commons" />
-            15 <Image src="/asset/gem_r.png" width={30} height={20} alt="Rares" />
-             3 <Image src="/asset/gem_u.png" width={30} height={20} alt="Uniques" />
+            {stats.commons} <Image src="/asset/gem_c.png" width={25} height={20} alt="Commons" />
+            {stats.rares} <Image src="/asset/gem_r.png" width={30} height={20} alt="Rares" />
+            {stats.uniques} <Image src="/asset/gem_u.png" width={30} height={20} alt="Uniques" />
           </div>
         </div>
       </div>
@@ -83,10 +125,10 @@ export function CardStackView(props: CardStackProps) {
   return (
     <div className="">
       {stack.cards.map((card, index) => {
-          return (
-            <CardView key={index} card={card} trimmed={index < lastIndex} zIndex={index} />
-          )
-        }
+        return (
+          <CardView key={index} card={card} trimmed={index < lastIndex} zIndex={index} />
+        )
+      }
       )}
     </div>
   )
@@ -104,8 +146,8 @@ export function CardView(props: CardProps) {
   return (
     <div
       className={clsx("rounded-card shadow-card relative", trimmed && "max-h-trimmed")}
-      style={{zIndex: props.zIndex}}
-      >
+      style={{ zIndex: props.zIndex }}
+    >
       <Image className="rounded-card" alt={card.name.en} src={card.imagePath.en} width={1200} height={1200} quality={90} />
     </div>
   )
