@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "altered-deckfmt": "^0.1.0",
+    "altered-deckfmt": "^0.2.0",
     "clsx": "^2.1.1",
     "html-to-image": "^1.11.11",
     "next": "14.2.6",
@@ -25,5 +25,6 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.10",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "yarn@4.4.1"
 }
