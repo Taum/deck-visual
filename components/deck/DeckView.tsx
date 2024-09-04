@@ -1,13 +1,18 @@
 
 import Image from "next/image";
 import { Decklist, CardStack } from '../../lib/decklist'
-import { Card, Faction } from '../../lib/models'
+import { Rarity, Card, Faction } from '../../lib/models'
 import clsx from 'clsx';
 
 import { Montserrat } from 'next/font/google'
+import { Nerko_One } from "next/font/google";
 
 const montserrat = Montserrat({
   weight: ['400', '600'],
+  subsets: ['latin'],
+})
+const titleFont = Nerko_One({
+  weight: '400',
   subsets: ['latin'],
 })
 
@@ -88,29 +93,67 @@ function gatherStats(deckList: Decklist): DeckStats {
 export function DeckHeaderView(props: DeckHeaderProps) {
   const hero = props.deckList.hero
   const heroThumb = hero.assets.HERO_THUMB?.at(0)
+  const bannerImage = `/asset/banner_${props.deckList.faction}.png`
   const baseColor = colorForFaction(props.deckList.faction)
   const stats = gatherStats(props.deckList)
 
   if (!heroThumb) { return null }
 
+  const cardTypesStats = []
+  if (stats.characters > 0) {
+    cardTypesStats.push(`${stats.characters} Characters`)
+  }
+  if (stats.spells > 0) {
+    cardTypesStats.push(`${stats.spells} Spells`)
+  }
+  if (stats.permanents > 0) {
+    cardTypesStats.push(`${stats.permanents} Permanents`)
+  }
+
   return (
-    <div className={clsx(`bg-${baseColor}-800 text-${baseColor}-50`, "flex flex-row h-32")}>
+    <div className={clsx(`bg-${baseColor}-800 text-${baseColor}-50`, "flex flex-row h-36")}>
       <Image className="grow-0 shrink-0 h-32 clip-heroThumb aspect-headerthumb" src={heroThumb} alt={hero.name.en} width={640} height={288} style={{ width: 'auto', height: 'auto' }} quality={90} />
-      <div className="grow flex flex-col justify-between py-2 px-1">
-        <div className="">
-          <h2 className="font-title font-extrabold text-xl">{hero.name.en}</h2>
+      <div className="grow flex flex-col justify-between">
+        <div className="flex flex-row justify-between self-stretch">
+          <div className="m-4">
+            <h2 className={clsx(titleFont.className, "text-6xl")}>{hero.name.en}</h2>
+          </div>
+          <div className="relative mr-6" style={{top: '-0.5rem', marginBottom: '-2rem'}}>
+            <Image src={bannerImage} alt={hero.mainFaction} width={60} height={120} quality={90}
+             style={{ width: 'auto', height: '7rem' }} />
+          </div>
         </div>
-        <div className={clsx(montserrat.className, "self-stretch flex flex-row justify-between")}>
-          <div className="">
-            {stats.characters} Characters - {stats.spells} Spells - {stats.permanents} Permanents
+        <div className={clsx(montserrat.className, "self-stretch flex flex-row items-baseline justify-between mr-4 mb-1")}>
+          <div className="ml-4">
+            {cardTypesStats.join(" \u00a0 / \u00a0 ")}
           </div>
           <div className="flex flex-row items-baseline font-semibold">
-            {stats.commons} <Image src="/asset/gem_c.png" width={25} height={20} alt="Commons" />
-            {stats.rares} <Image src="/asset/gem_r.png" width={30} height={20} alt="Rares" />
-            {stats.uniques} <Image src="/asset/gem_u.png" width={30} height={20} alt="Uniques" />
+            {stats.commons > 0 && <RarityGem rarity={Rarity.COMMON} count={stats.commons} />}
+            {stats.rares > 0 && <RarityGem rarity={Rarity.RARE} count={stats.rares} />}
+            {stats.uniques > 0 && <RarityGem rarity={Rarity.UNIQUE} count={stats.uniques} />}
           </div>
         </div>
       </div>
+    </div>
+  )
+}
+
+export interface RarityGemProps {
+  count: number
+  rarity: Rarity
+}
+function RarityGem({count, rarity}: RarityGemProps) {
+  let image: string
+  let altText: string
+  switch (rarity) {
+    case Rarity.COMMON: image = "/asset/gem_c.png"; altText = "Commons"; break;
+    case Rarity.RARE: image = "/asset/gem_r.png"; altText = "Rares"; break;
+    case Rarity.UNIQUE: image = "/asset/gem_u.png"; altText = "Uniques"; break;
+  }
+  return (
+    <div className="flex flex-col text-center m-1">
+      <div className="text-center" style={{marginBottom: rarity == Rarity.COMMON ? '-0.32rem' : '-0.15rem'}}>{count}</div>
+      <Image src={image} width={25} height={20} alt={altText} />
     </div>
   )
 }

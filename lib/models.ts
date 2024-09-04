@@ -19,8 +19,8 @@ export interface Card {
   mainFaction: Faction
   elements: CardElements
   assets: CardAssets
-  rarity: "COMMON" | "RARE" | "UNIQUE"
-  type: "SPELL" | "CHARACTER" | "PERMANENT" | "HERO" | "TOKEN"
+  rarity: Rarity
+  type: CardType
 }
 
 export enum Faction {
@@ -32,6 +32,20 @@ export enum Faction {
   Yzmir = "YZ",
   Neutral = "NE",
 } 
+
+export enum Rarity {
+  COMMON = "COMMON",
+  RARE = "RARE",
+  UNIQUE = "UNIQUE",
+}
+
+export enum CardType {
+  SPELL = "SPELL",
+  CHARACTER = "CHARACTER",
+  PERMANENT = "PERMANENT",
+  HERO = "HERO",
+  TOKEN = "TOKEN",
+}
 
 export interface CardElements {
   MAIN_COST: string | null
